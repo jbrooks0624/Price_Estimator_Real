@@ -5,7 +5,11 @@ const Sidebar = dynamic(() => import("@/components/Sidebar"));
 const SidebarToggle = dynamic(() => import("@/components/SidebarToggle"));
 const ChatToggle = dynamic(() => import("@/components/ChatToggle"));
 const ChatSidebar = dynamic(() => import("@/components/ChatSidebar"));
-import { XMarkIcon, InformationCircleIcon } from "@heroicons/react/24/outline";
+import {
+  XMarkIcon,
+  InformationCircleIcon,
+  ArrowPathIcon,
+} from "@heroicons/react/24/outline";
 import SidebarContent from "@/components/SidebarContent";
 import {
   useSidebarState,
@@ -20,6 +24,7 @@ function HomePageInner() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [unitsOpen, setUnitsOpen] = useState(false);
   const [chatOpen, setChatOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const { state, setState } = useSidebarState();
   const { output, setOutput } = useOutputState();
 
@@ -115,6 +120,7 @@ function HomePageInner() {
 
   const runCalculator = async () => {
     try {
+      setIsLoading(true);
       const apiBase =
         process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000";
       const resp = await fetch(`${apiBase}/estimate`, {
@@ -126,6 +132,8 @@ function HomePageInner() {
       setOutput({ raw: data });
     } catch (err) {
       console.error(err);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -236,9 +244,11 @@ function HomePageInner() {
           <button
             type="button"
             onClick={runCalculator}
-            className="inline-flex items-center justify-center gap-2 rounded-md bg-blue-600 px-6 py-2 text-sm font-medium text-white shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400"
+            disabled={isLoading}
+            className="inline-flex items-center justify-center gap-2 rounded-md bg-blue-600 px-6 py-2 text-sm font-medium text-white shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 disabled:opacity-60 disabled:cursor-not-allowed"
           >
-            Run Calculator
+            {isLoading && <ArrowPathIcon className="h-5 w-5 animate-spin" />}
+            <span>{isLoading ? "Calculating..." : "Run Calculator"}</span>
           </button>
         </div>
         <div className="mt-2 flex justify-center gap-3">
