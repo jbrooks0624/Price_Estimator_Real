@@ -4,37 +4,53 @@ import React from "react";
 import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/24/outline";
 import { useSidebarState } from "@/components/sidebarState/SidebarStateContext";
 
-const stages = [
+import type { SidebarState } from "@/components/sidebarState/SidebarStateContext";
+
+type StageKey =
+  | "start"
+  | "afterExamine"
+  | "afterTrimming"
+  | "afterPickle"
+  | "afterCoating"
+  | "afterSlitting"
+  | "afterCTL"
+  | "end";
+
+const stages: Array<{
+  key: StageKey;
+  label: string;
+  visible: (s: SidebarState) => boolean;
+}> = [
   { key: "start", label: "At Start", visible: () => true },
   {
     key: "afterExamine",
     label: "After Examine",
-    visible: (s: any) => !s.examine.skipped,
+    visible: (s) => !s.examine.skipped,
   },
   {
     key: "afterTrimming",
     label: "After Trimming",
-    visible: (s: any) => !s.trimming.skipped,
+    visible: (s) => !s.trimming.skipped,
   },
   {
     key: "afterPickle",
     label: "After Pickle & Oil",
-    visible: (s: any) => !s.pickleOil.skipped,
+    visible: (s) => !s.pickleOil.skipped,
   },
   {
     key: "afterCoating",
     label: "After Coating",
-    visible: (s: any) => !s.coating.skipped,
+    visible: (s) => !s.coating.skipped,
   },
   {
     key: "afterSlitting",
     label: "After Slitting",
-    visible: (s: any) => !s.slitting.skipped,
+    visible: (s) => !s.slitting.skipped,
   },
   {
     key: "afterCTL",
     label: "After Cut To Length",
-    visible: (s: any) => !s.ctl.skipped,
+    visible: (s) => !s.ctl.skipped,
   },
   { key: "end", label: "At End", visible: () => true },
 ];
@@ -44,7 +60,7 @@ const StorageFreightSection: React.FC = () => {
   const [open, setOpen] = React.useState(false);
 
   const update = (
-    stageKey: string,
+    stageKey: StageKey,
     field: "storage" | "freight",
     value: string
   ) => {

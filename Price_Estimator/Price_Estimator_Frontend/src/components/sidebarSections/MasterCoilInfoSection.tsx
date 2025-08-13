@@ -10,15 +10,7 @@ import { useSidebarState } from "@/components/sidebarState/SidebarStateContext";
 const MasterCoilInfoSection: React.FC = () => {
   const { state, setState } = useSidebarState();
   const master = state.master;
-  const updateField = (field: keyof typeof master, value: string) => {
-    setState((prev) => ({
-      ...prev,
-      master: {
-        ...prev.master,
-        [field]: value,
-      },
-    }));
-  };
+  // removed unused helper
 
   const format = (v: string, d: number) =>
     v === "" ? "" : parseFloat(v).toFixed(d);
