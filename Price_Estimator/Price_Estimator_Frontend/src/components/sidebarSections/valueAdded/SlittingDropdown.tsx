@@ -6,11 +6,11 @@ import { ProcessDropdown, SkipButton, format } from "./VACommon";
 import { PlusIcon, MinusIcon } from "@heroicons/react/24/outline";
 
 const SlittingDropdown: React.FC<{
-  validateCuts: (cuts: Array<{ width: string; num: string }>) => boolean;
+  validateCuts?: (cuts: Array<{ width: string; num: string }>) => boolean;
   updateSlitCut: (index: number, field: "width" | "num", value: string) => void;
   addSlitCut: () => void;
   deleteSlitCut: () => void;
-}> = ({ validateCuts, updateSlitCut, addSlitCut, deleteSlitCut }) => {
+}> = ({ updateSlitCut, addSlitCut, deleteSlitCut }) => {
   const { state, setState } = useSidebarState();
   return (
     <ProcessDropdown title="Slitting (Optional)">

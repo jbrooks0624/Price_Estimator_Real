@@ -28,7 +28,7 @@ function HomePageInner() {
     const parsed = parseFloat(v);
     return isNaN(parsed) ? 0 : parsed;
   };
-  const numArr = (arr: any[]) => arr.map((v) => num(v));
+  const numArr = (arr: string[]): number[] => arr.map((v) => num(v));
   const numPercent = (v: string) => num(v) / 100;
 
   const buildPayload = () => {
@@ -129,14 +129,17 @@ function HomePageInner() {
     }
   };
 
-  const formatValue = (label: string, v: any) => {
+  const formatValue = (
+    label: string,
+    v: number | string | null | undefined
+  ) => {
     if (v === null || v === undefined) return "-";
     const lower = label.toLowerCase();
     const isWeight = lower.includes("weight");
     const isPercent = lower.includes("percent");
     const dec = isWeight || isPercent ? 2 : 4;
     const num = typeof v === "number" ? v : parseFloat(v);
-    if (isNaN(num)) return v;
+    if (isNaN(num)) return String(v);
     return num.toFixed(dec);
   };
 
@@ -146,7 +149,7 @@ function HomePageInner() {
     items,
   }: {
     title: string;
-    items: { label: string; value: any }[];
+    items: { label: string; value: number | string | null | undefined }[];
   }) => (
     <div className="relative border rounded-md p-4 flex-1 min-w-[220px] max-w-[250px] bg-white shadow">
       {/* info button */}
