@@ -1,0 +1,42 @@
+.venv
+/Price_Estimator.egg-info
+#pycache
+/Price_Estimator/__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.pyw
+*.pyz
+*.pywz
+*.pyzw
+
+#dev container
+__pycache__/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+coverage.xml
+htmlcov/
+
+# Environment and OS files
+.env
+.env.*
+.DS_Store
+
+# Build artifacts
+build/
+dist/
+site/
+pip-wheel-metadata/
+
+# Editor/IDE
+.vscode/
+.idea/
+
+# Caches
+.cache/
+.ipynb_checkpoints/
+
+# Optional: uncomment if you don't want to commit pyenv version file
+# .python-version

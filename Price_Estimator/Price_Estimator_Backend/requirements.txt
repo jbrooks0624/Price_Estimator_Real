@@ -1,0 +1,10 @@
+streamlit
+pandas
+xlsxwriter
+streamlit-autorefresh>=0.0.2
+fastapi
+uvicorn
+pydantic
+openai
+
+python-dotenv
