@@ -6,11 +6,15 @@ import re
 import sys
 import os
 from typing import Any, Dict
+from dotenv import load_dotenv
 
 # Make sure the local directory is importable when the application is started
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 if CURRENT_DIR not in sys.path:
     sys.path.append(CURRENT_DIR)
+
+# Load environment variables from .env if present
+load_dotenv()
 
 try:
     # Prefer relative imports when the package is discovered correctly (e.g. when
@@ -26,12 +30,15 @@ from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(title="Price Estimator API", version="1.0.0")
 
-# CORS for frontend localhost
+# CORS configuration from environment
+allowed_origins_env = os.getenv("ALLOWED_ORIGINS", "http://localhost:3000,http://127.0.0.1:3000")
+allowed_origins = [o.strip() for o in allowed_origins_env.split(",") if o.strip()]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "http://127.0.0.1:3000"],
+    allow_origins=allowed_origins,
     allow_methods=["POST"],
-    allow_headers=["*"]
+    allow_headers=["*"],
 )
 
 

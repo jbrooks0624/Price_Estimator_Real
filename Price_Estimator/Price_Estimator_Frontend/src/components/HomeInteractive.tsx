@@ -115,7 +115,9 @@ function HomePageInner() {
 
   const runCalculator = async () => {
     try {
-      const resp = await fetch("http://localhost:8000/estimate", {
+      const apiBase =
+        process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000";
+      const resp = await fetch(`${apiBase}/estimate`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(buildPayload()),
