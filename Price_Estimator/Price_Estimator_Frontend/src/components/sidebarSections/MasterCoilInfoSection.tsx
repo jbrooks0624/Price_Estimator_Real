@@ -5,7 +5,7 @@ import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/24/outline";
 import { useSidebarState } from "@/components/sidebarState/SidebarStateContext";
 
 /**
- * Master Coil Info section with collapsible functionality and shared state.
+ * Master Coil Info section with collapsible functionality and shared state
  */
 const MasterCoilInfoSection: React.FC = () => {
   const { state, setState } = useSidebarState();

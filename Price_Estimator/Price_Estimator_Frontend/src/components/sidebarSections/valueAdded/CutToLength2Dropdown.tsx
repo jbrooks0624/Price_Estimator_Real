@@ -211,10 +211,6 @@ const CutToLength2Dropdown: React.FC = () => {
                   }}
                 />
               </div>
-              <p className="text-xs text-gray-600 text-center mt-1">
-                These buttons are placeholders and do not affect calculations
-                yet.
-              </p>
             </div>
           </div>
         ))}
