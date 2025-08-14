@@ -7,7 +7,12 @@ import { PlusIcon, MinusIcon } from "@heroicons/react/24/outline";
 
 const SlittingDropdown: React.FC<{
   validateCuts?: (cuts: Array<{ width: string; num: string }>) => boolean;
-  updateSlitCut: (index: number, field: "width" | "num", value: string) => void;
+  updateSlitCut: (
+    index: number,
+    field: "width" | "num",
+    value: string,
+    commit?: boolean
+  ) => void;
   addSlitCut: () => void;
   deleteSlitCut: () => void;
 }> = ({ updateSlitCut, addSlitCut, deleteSlitCut }) => {
