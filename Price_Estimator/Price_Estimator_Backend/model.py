@@ -3,25 +3,25 @@ from pydantic import BaseModel, Field, validator
 from enum import Enum
 
 
-# --------------- CTL 2.0 models ---------------
+# --------------- Cut To Length (structured) models ---------------
 
-class CTL2Mode(str, Enum):
+class CutToLengthMode(str, Enum):
     percent = "percent"
     pieces = "pieces"
 
 
-class CTL2Action(str, Enum):
+class CutToLengthAction(str, Enum):
     scrap = "scrap"
     restock = "restock"
     level = "level"
 
 
-class CTL2Segment(BaseModel):
-    mode: CTL2Mode
+class CutToLengthSegment(BaseModel):
+    mode: CutToLengthMode
     length: float
     percent: Optional[float] = None
     pieces: Optional[int] = None
-    action: CTL2Action
+    action: CutToLengthAction
 
     # Accept user-facing labels like "Level to Balance" and normalise to enum values
     @validator("action", pre=True)
@@ -37,9 +37,10 @@ class CTL2Segment(BaseModel):
         return value
 
 
-class CutToLength2Input(BaseModel):
+class CutToLengthInput(BaseModel):
     skipped: bool = True
-    segments: List[CTL2Segment] = Field(default_factory=list)
+    segments: List[CutToLengthSegment] = Field(default_factory=list)
+    cost: float = 1.5
 
 
 # --------------- Price Estimator Input ---------------
@@ -82,11 +83,8 @@ class PriceEstimatorInput(BaseModel):
     slitting_cost: Optional[float] = None
     skip_slitting: bool = False
 
-    # Cut to length
-    cut_percent: Optional[float] = None
-    cut_cost: Optional[float] = None
-    cut_weight: Optional[float] = None
-    skip_cut: bool = False
+    # Cut to length (structured)
+    cut_to_length: Optional[CutToLengthInput] = None
 
     # Storage costs
     storage_start: float = 0.0
@@ -110,8 +108,7 @@ class PriceEstimatorInput(BaseModel):
 
     margin: float = 15.0
 
-    # Cut To Length 2.0 (structured, optional; not used in calculations yet)
-    ctl2: Optional[CutToLength2Input] = None
+    # Back-compat note: legacy simple CTL fields removed; use 'cut_to_length'
 
 # --------------- Price Estimator Output ---------------
 
@@ -160,7 +157,6 @@ class PriceEstimatorOutput(BaseModel):
     storage_after_slitting: Optional[float] = None
     freight_after_slitting: Optional[float] = None
     running_cost_after_slitting: Optional[float] = None
-
     # Cut to length
     cost_to_cut_to_length: Optional[float] = None
     cut_scrap_weight: Optional[int] = None

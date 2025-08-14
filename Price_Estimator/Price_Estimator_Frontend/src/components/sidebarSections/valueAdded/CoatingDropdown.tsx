@@ -26,8 +26,18 @@ const CoatingDropdown: React.FC = () => {
             type="number"
             min={0}
             step="1"
+            inputMode="decimal"
             value={state.coating.scrapPercent}
             onChange={(e) =>
+              setState((prev) => ({
+                ...prev,
+                coating: {
+                  ...prev.coating,
+                  scrapPercent: e.target.value,
+                },
+              }))
+            }
+            onBlur={(e) =>
               setState((prev) => ({
                 ...prev,
                 coating: {
@@ -50,8 +60,15 @@ const CoatingDropdown: React.FC = () => {
             type="number"
             min={0}
             step="0.1"
+            inputMode="decimal"
             value={state.coating.cost}
             onChange={(e) =>
+              setState((prev) => ({
+                ...prev,
+                coating: { ...prev.coating, cost: e.target.value },
+              }))
+            }
+            onBlur={(e) =>
               setState((prev) => ({
                 ...prev,
                 coating: { ...prev.coating, cost: format(e.target.value, 4) },

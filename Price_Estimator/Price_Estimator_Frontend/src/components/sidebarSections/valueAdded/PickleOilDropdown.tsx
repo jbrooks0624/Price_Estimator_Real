@@ -26,8 +26,18 @@ const PickleOilDropdown: React.FC = () => {
             type="number"
             min={0}
             step="1"
+            inputMode="decimal"
             value={state.pickleOil.scrapPercent}
             onChange={(e) =>
+              setState((prev) => ({
+                ...prev,
+                pickleOil: {
+                  ...prev.pickleOil,
+                  scrapPercent: e.target.value,
+                },
+              }))
+            }
+            onBlur={(e) =>
               setState((prev) => ({
                 ...prev,
                 pickleOil: {
@@ -50,8 +60,18 @@ const PickleOilDropdown: React.FC = () => {
             type="number"
             min={0}
             step="0.1"
+            inputMode="decimal"
             value={state.pickleOil.cost}
             onChange={(e) =>
+              setState((prev) => ({
+                ...prev,
+                pickleOil: {
+                  ...prev.pickleOil,
+                  cost: e.target.value,
+                },
+              }))
+            }
+            onBlur={(e) =>
               setState((prev) => ({
                 ...prev,
                 pickleOil: {

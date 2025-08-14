@@ -50,7 +50,7 @@ const stages: Array<{
   {
     key: "afterCTL",
     label: "After Cut To Length",
-    visible: (s) => !s.ctl.skipped,
+    visible: (s) => !s.cut.skipped,
   },
   { key: "end", label: "At End", visible: () => true },
 ];
@@ -125,12 +125,16 @@ const StorageFreightSection: React.FC = () => {
                         type="number"
                         min={0}
                         step="0.1"
+                        inputMode="decimal"
                         value={row.storage}
                         onChange={(e) =>
+                          update(st.key, "storage", e.target.value)
+                        }
+                        onBlur={(e) =>
                           update(
                             st.key,
                             "storage",
-                            parseFloat(e.target.value).toFixed(4)
+                            parseFloat(e.target.value || "0").toFixed(4)
                           )
                         }
                         className="block w-full rounded-md border-2 border-black bg-white p-2 focus:border-black focus:ring-black"
@@ -142,12 +146,16 @@ const StorageFreightSection: React.FC = () => {
                         type="number"
                         min={0}
                         step="100"
+                        inputMode="decimal"
                         value={row.freight}
                         onChange={(e) =>
+                          update(st.key, "freight", e.target.value)
+                        }
+                        onBlur={(e) =>
                           update(
                             st.key,
                             "freight",
-                            parseFloat(e.target.value).toFixed(4)
+                            parseFloat(e.target.value || "0").toFixed(4)
                           )
                         }
                         className="block w-full rounded-md border-2 border-black bg-white p-2 focus:border-black focus:ring-black"

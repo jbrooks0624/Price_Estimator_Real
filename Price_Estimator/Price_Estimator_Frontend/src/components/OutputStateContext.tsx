@@ -30,6 +30,7 @@ export interface PriceEstimatorOutput {
   storage_after_slitting?: number | null;
   freight_after_slitting?: number | null;
   running_cost_after_slitting?: number | null;
+  // Cut to length (structured)
   cost_to_cut_to_length?: number | null;
   cut_scrap_weight?: number | null;
   storage_after_cut?: number | null;

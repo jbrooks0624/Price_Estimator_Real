@@ -7,8 +7,7 @@ import TrimmingDropdown from "@/components/sidebarSections/valueAdded/TrimmingDr
 import PickleOilDropdown from "@/components/sidebarSections/valueAdded/PickleOilDropdown";
 import CoatingDropdown from "@/components/sidebarSections/valueAdded/CoatingDropdown";
 import SlittingDropdown from "@/components/sidebarSections/valueAdded/SlittingDropdown";
-import CutToLengthDropdown from "@/components/sidebarSections/valueAdded/CutToLengthDropdown";
-import CutToLength2Dropdown from "@/components/sidebarSections/valueAdded/CutToLength2Dropdown";
+import CutToLengthDropdown from "./valueAdded/CutToLengthDropdown";
 import { useSidebarState } from "@/components/sidebarState/SidebarStateContext";
 
 const ValueAddedProcessesSection: React.FC = () => {
@@ -28,14 +27,18 @@ const ValueAddedProcessesSection: React.FC = () => {
   const updateSlitCut = (
     index: number,
     field: "width" | "num",
-    value: string
+    value: string,
+    commit: boolean = false
   ) => {
     setState((prev) => {
       const cutsCopy = [...prev.slitting.cuts];
       if (field === "width") {
         cutsCopy[index] = {
           ...cutsCopy[index],
-          width: value === "" ? "" : parseFloat(value).toFixed(4),
+          width:
+            commit && value !== ""
+              ? parseFloat(value || "0").toFixed(4)
+              : value,
         };
       } else {
         cutsCopy[index] = { ...cutsCopy[index], num: value };
@@ -96,7 +99,6 @@ const ValueAddedProcessesSection: React.FC = () => {
             deleteSlitCut={deleteSlitCut}
           />
           <CutToLengthDropdown />
-          <CutToLength2Dropdown />
         </>
       )}
     </section>

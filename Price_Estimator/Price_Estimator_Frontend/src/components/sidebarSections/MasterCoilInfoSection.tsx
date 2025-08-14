@@ -64,15 +64,28 @@ const MasterCoilInfoSection: React.FC = () => {
               type="number"
               min={0}
               step={1}
+              inputMode="decimal"
               value={master.width}
               onChange={(e) => {
-                const nextVal = format(e.target.value, 4);
-                const nextLength = recomputeLength({ width: nextVal });
+                const raw = e.target.value;
+                const nextLength = recomputeLength({ width: raw });
                 setState((prev) => ({
                   ...prev,
                   master: {
                     ...prev.master,
-                    width: nextVal,
+                    width: raw,
+                    length: nextLength,
+                  },
+                }));
+              }}
+              onBlur={(e) => {
+                const formatted = format(e.target.value, 4);
+                const nextLength = recomputeLength({ width: formatted });
+                setState((prev) => ({
+                  ...prev,
+                  master: {
+                    ...prev.master,
+                    width: formatted,
                     length: nextLength,
                   },
                 }));
@@ -94,15 +107,28 @@ const MasterCoilInfoSection: React.FC = () => {
               type="number"
               min={0}
               step={10}
+              inputMode="decimal"
               value={master.weight}
               onChange={(e) => {
-                const nextVal = format(e.target.value, 2);
-                const nextLength = recomputeLength({ weight: nextVal });
+                const raw = e.target.value;
+                const nextLength = recomputeLength({ weight: raw });
                 setState((prev) => ({
                   ...prev,
                   master: {
                     ...prev.master,
-                    weight: nextVal,
+                    weight: raw,
+                    length: nextLength,
+                  },
+                }));
+              }}
+              onBlur={(e) => {
+                const formatted = format(e.target.value, 2);
+                const nextLength = recomputeLength({ weight: formatted });
+                setState((prev) => ({
+                  ...prev,
+                  master: {
+                    ...prev.master,
+                    weight: formatted,
                     length: nextLength,
                   },
                 }));
@@ -124,12 +150,20 @@ const MasterCoilInfoSection: React.FC = () => {
               type="number"
               min={0}
               step={1}
+              inputMode="decimal"
               value={master.cost}
               onChange={(e) => {
-                const nextVal = format(e.target.value, 4);
+                const raw = e.target.value;
                 setState((prev) => ({
                   ...prev,
-                  master: { ...prev.master, cost: nextVal },
+                  master: { ...prev.master, cost: raw },
+                }));
+              }}
+              onBlur={(e) => {
+                const formatted = format(e.target.value, 4);
+                setState((prev) => ({
+                  ...prev,
+                  master: { ...prev.master, cost: formatted },
                 }));
               }}
               className="block w-full rounded-md border-2 border-black bg-white p-2 focus:border-black focus:ring-black"
@@ -149,15 +183,28 @@ const MasterCoilInfoSection: React.FC = () => {
               type="number"
               min={0}
               step={0.0001}
+              inputMode="decimal"
               value={master.thickness}
               onChange={(e) => {
-                const nextVal = format(e.target.value, 4);
-                const nextLength = recomputeLength({ thickness: nextVal });
+                const raw = e.target.value;
+                const nextLength = recomputeLength({ thickness: raw });
                 setState((prev) => ({
                   ...prev,
                   master: {
                     ...prev.master,
-                    thickness: nextVal,
+                    thickness: raw,
+                    length: nextLength,
+                  },
+                }));
+              }}
+              onBlur={(e) => {
+                const formatted = format(e.target.value, 4);
+                const nextLength = recomputeLength({ thickness: formatted });
+                setState((prev) => ({
+                  ...prev,
+                  master: {
+                    ...prev.master,
+                    thickness: formatted,
                     length: nextLength,
                   },
                 }));
@@ -196,12 +243,20 @@ const MasterCoilInfoSection: React.FC = () => {
               type="number"
               min={0}
               step={1}
+              inputMode="decimal"
               value={master.margin}
               onChange={(e) => {
-                const nextVal = format(e.target.value, 2);
+                const raw = e.target.value;
                 setState((prev) => ({
                   ...prev,
-                  master: { ...prev.master, margin: nextVal },
+                  master: { ...prev.master, margin: raw },
+                }));
+              }}
+              onBlur={(e) => {
+                const formatted = format(e.target.value, 2);
+                setState((prev) => ({
+                  ...prev,
+                  master: { ...prev.master, margin: formatted },
                 }));
               }}
               className="block w-full rounded-md border-2 border-black bg-white p-2 focus:border-black focus:ring-black"

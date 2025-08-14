@@ -36,8 +36,12 @@ const SlittingDropdown: React.FC<{
                   type="number"
                   min={0}
                   step="1"
+                  inputMode="decimal"
                   value={cut.width}
                   onChange={(e) => updateSlitCut(idx, "width", e.target.value)}
+                  onBlur={(e) =>
+                    updateSlitCut(idx, "width", e.target.value, true)
+                  }
                   disabled={state.slitting.skipped}
                   className={`block w-full rounded-md border-2 border-black bg-white p-2 focus:border-black focus:ring-black ${
                     state.slitting.skipped
@@ -95,11 +99,21 @@ const SlittingDropdown: React.FC<{
             type="number"
             min={0}
             step="0.1"
+            inputMode="decimal"
             value={state.slitting.cost}
             onChange={(e) =>
               setState((prev) => ({
                 ...prev,
-                slitting: { ...prev.slitting, cost: format(e.target.value, 4) },
+                slitting: { ...prev.slitting, cost: e.target.value },
+              }))
+            }
+            onBlur={(e) =>
+              setState((prev) => ({
+                ...prev,
+                slitting: {
+                  ...prev.slitting,
+                  cost: format(e.target.value, 4),
+                },
               }))
             }
             disabled={state.slitting.skipped}

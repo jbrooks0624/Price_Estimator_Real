@@ -72,11 +72,7 @@ function HomePageInner() {
       slitting_cost: state.slitting.cost,
       skip_slitting: state.slitting.skipped,
 
-      // cut to length
-      cut_percent: numPercent(state.ctl.percent),
-      cut_cost: state.ctl.cost,
-      cut_weight: state.ctl.scrapWeight,
-      skip_cut: state.ctl.skipped,
+      // cut to length (structured)
 
       // storage / freight
       storage_start: num(sf.start?.storage || "0"),
@@ -96,12 +92,12 @@ function HomePageInner() {
       storage_end: num(sf.end?.storage || "0"),
       freight_end: num(sf.end?.freight || "0"),
 
-      // ctl2 (structured)
-      ctl2: state.ctl2.skipped
+      // cut_to_length (structured)
+      cut_to_length: state.cut.skipped
         ? undefined
         : {
-            skipped: state.ctl2.skipped,
-            segments: state.ctl2.segments.map((s) => ({
+            skipped: state.cut.skipped,
+            segments: state.cut.segments.map((s) => ({
               mode: s.mode,
               length: num(s.length || "0"),
               percent: s.mode === "percent" ? num(s.percent || "0") : undefined,
@@ -114,6 +110,7 @@ function HomePageInner() {
                   : undefined,
               action: s.action,
             })),
+            cost: state.cut.cost === "" ? 1.5 : num(state.cut.cost),
           },
     };
   };
@@ -413,17 +410,18 @@ function HomePageInner() {
                 />
               )}
 
-              {!state.ctl.skipped && (
+              {!state.cut.skipped && (
                 <StatBox
                   title="Cut to Length"
                   items={[
-                    { label: "Cost", value: output.raw.cost_to_cut_to_length },
+                    {
+                      label: "Cost",
+                      value: output.raw.cost_to_cut_to_length,
+                    },
                     {
                       label: "Scrap Weight",
                       value: output.raw.cut_scrap_weight,
                     },
-                    { label: "Storage", value: output.raw.storage_after_cut },
-                    { label: "Freight", value: output.raw.freight_after_cut },
                     {
                       label: "Running Cost",
                       value: output.raw.running_cost_after_cut,

@@ -2,6 +2,7 @@ from openai import OpenAI
 import os
 from dotenv import load_dotenv
 
+
 load_dotenv()
 
 client = OpenAI(
@@ -9,12 +10,19 @@ client = OpenAI(
 )
 
 
-def create_response(messages):
+def create_response(messages: str) -> str:
     response = client.responses.create(
         model="gpt-4.1-mini",
         input=[
             {"role": "system", "content": SYSTEM_PROMPT},
-            {"role": "user", "content": f"Create a JSON object that matches the SidebarState schema based on the following user request: {messages}"}],
+            {
+                "role": "user",
+                "content": (
+                    "Create a JSON object that matches the SidebarState schema "
+                    "based on the following user request: " + messages
+                ),
+            },
+        ],
     )
 
     return response.output_text
@@ -110,5 +118,12 @@ Here are the parameters to run your calculation with scrapping – let me know i
 ```
 """
 
+
 if __name__ == "__main__":
-    print(create_response("I want to examine the coil with a scrapPercent of 2, coat the coil with a scrapPercent of 3, and slit the coil into 1 piece with a width of 47. The storage at the start and end will be .5"))
+    print(
+        create_response(
+            "I want to examine the coil with a scrapPercent of 2, coat the coil with a scrapPercent of 3, and slit the coil into 1 piece with a width of 47. The storage at the start and end will be .5"
+        )
+    )
+
+

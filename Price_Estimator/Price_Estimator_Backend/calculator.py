@@ -16,6 +16,7 @@ try:
         process_coating,
         process_slitting,
         process_cut,
+        process_cut_to_length,
     )
 except ImportError:  # Support running without package context
     from model import PriceEstimatorOutput
@@ -26,6 +27,7 @@ except ImportError:  # Support running without package context
         process_coating,
         process_slitting,
         process_cut,
+        process_cut_to_length,
     )
 
 
@@ -54,10 +56,7 @@ def calculate_price(
     slitting_width_cropped: Optional[float] = None,
     slitting_cost: Optional[float] = None,
     skip_slitting: bool = False,
-    cut_percent: Optional[float] = None,
-    cut_cost: Optional[float] = None,
-    cut_weight: Optional[float] = None,
-    skip_cut: bool = False,
+    cut_to_length: Optional[dict] = None,
     storage_start: float = 0.0,
     storage_examine: float = 0.0,
     storage_trimming: float = 0.0,
@@ -75,20 +74,13 @@ def calculate_price(
     freight_cut: float = 0.0,
     freight_end: float = 0.0,
     margin: float = 15.0,
+    # removed: ctl2 (renamed to cut_to_length)
 ) -> PriceEstimatorOutput:
     """Pure function that performs the full pricing calculation and returns a
     populated ``PriceEstimatorOutput`` with **no console output**.
     """
 
     out = PriceEstimatorOutput()
-
-    print(f'trimming_width_cropped: {trimming_width_cropped}')
-    print(f'skip_trimming: {skip_trimming}')
-
-    # print(f'master_coil_cost: {master_coil_cost}')
-    # print(f'master_coil_weight: {master_coil_weight}')
-    # print(f'storage_start: {storage_start}')
-    # print(f'freight_start: {freight_start}')
 
     total_cost = master_coil_cost * master_coil_weight
     total_cost += storage_start * master_coil_weight
@@ -217,7 +209,6 @@ def calculate_price(
             - slitting_scrap
         )
         total_cost += freight_slitting
-    print(f"slitting_cost_val: {slitting_cost_val}")
     total_cost += (
         master_coil_weight - examine_scrap - trimming_scrap - pickle_scrap - coating_scrap
     ) * slitting_cost_val
@@ -237,27 +228,30 @@ def calculate_price(
     out.running_cost_after_slitting = _safe_ratio(total_cost, running_weight)
 
     # -------------------- CUT TO LENGTH --------------------
-    total_weight_before_cut = running_weight
-    cut_cost_val, cut_scrap, _ = process_cut(
-        cut_percent,
-        widths_per_cut,
-        num_cuts_needed,
-        total_weight_before_cut,
-        master_coil_width,
-        skip_cut,
-        cut_cost,
-    )
-    if not skip_cut:
-        total_cost += storage_cut * (total_weight_before_cut - cut_scrap)
-        total_cost += freight_cut
-    total_cost += total_weight_before_cut * cut_cost_val
-    running_weight = total_weight_before_cut - cut_scrap
+    if cut_to_length and not cut_to_length.get("skipped", True):
+        total_weight_before_cut = running_weight
+        total_length_for_cut = float(master_coil_length or 0.0)
+        user_cut_cost = float(cut_to_length.get("cost", 1.5))
 
-    out.cost_to_cut_to_length = cut_cost_val
-    out.cut_scrap_weight = int(round(cut_scrap))
-    out.storage_after_cut = storage_cut
-    out.freight_after_cut = freight_cut
-    out.running_cost_after_cut = _safe_ratio(total_cost, running_weight)
+        _ignored_cost, cut_scrap_weight, _msg = process_cut_to_length(
+            cut_to_length.get("segments", []),
+            total_length_for_cut,
+            total_weight_before_cut,
+            skipped=False,
+            cost=user_cut_cost,
+        )
+
+        # Apply storage/freight at this stage after scrap
+        total_cost += storage_cut * (total_weight_before_cut - cut_scrap_weight)
+        total_cost += freight_cut
+        total_cost += total_weight_before_cut * user_cut_cost
+        running_weight = total_weight_before_cut - cut_scrap_weight
+
+        out.cost_to_cut_to_length = user_cut_cost
+        out.cut_scrap_weight = int(round(cut_scrap_weight))
+        out.storage_after_cut = storage_cut
+        out.freight_after_cut = freight_cut
+        out.running_cost_after_cut = _safe_ratio(total_cost, running_weight)
 
     # -------------------- END / SUMMARY --------------------
     total_cost += storage_end * running_weight

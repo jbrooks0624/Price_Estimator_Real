@@ -26,8 +26,18 @@ const ExamineDropdown: React.FC = () => {
             type="number"
             min={0}
             step="1"
+            inputMode="decimal"
             value={state.examine.scrapPercent}
             onChange={(e) =>
+              setState((prev) => ({
+                ...prev,
+                examine: {
+                  ...prev.examine,
+                  scrapPercent: e.target.value,
+                },
+              }))
+            }
+            onBlur={(e) =>
               setState((prev) => ({
                 ...prev,
                 examine: {
@@ -50,8 +60,15 @@ const ExamineDropdown: React.FC = () => {
             type="number"
             min={0}
             step="0.1"
+            inputMode="decimal"
             value={state.examine.cost}
             onChange={(e) =>
+              setState((prev) => ({
+                ...prev,
+                examine: { ...prev.examine, cost: e.target.value },
+              }))
+            }
+            onBlur={(e) =>
               setState((prev) => ({
                 ...prev,
                 examine: { ...prev.examine, cost: format(e.target.value, 4) },

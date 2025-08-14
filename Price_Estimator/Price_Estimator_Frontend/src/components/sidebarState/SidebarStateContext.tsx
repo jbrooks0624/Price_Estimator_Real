@@ -5,7 +5,7 @@ import React, { createContext, useContext, useState } from "react";
 type CTL2Mode = "percent" | "pieces";
 type CTL2Action = "scrap" | "restock" | "level";
 
-export type CTL2Segment = {
+export type CutToLengthSegment = {
   mode: CTL2Mode;
   length: string; // inches, stored as string for consistency
   percent?: string; // when mode === "percent"
@@ -47,16 +47,12 @@ export interface SidebarState {
     cuts: Array<{ width: string; num: string }>;
     cost: string;
   };
-  ctl: {
-    skipped: boolean;
-    percent: string;
-    scrapWeight: string;
-    cost: string;
-  };
+  // ctl removed; replaced by cut
   storageFreight: Record<string, { storage: string; freight: string }>;
-  ctl2: {
+  cut: {
     skipped: boolean;
-    segments: CTL2Segment[];
+    segments: CutToLengthSegment[];
+    cost: string;
   };
 }
 
@@ -88,16 +84,12 @@ export const initialSidebarState: SidebarState = {
     cuts: [{ width: "48.0000", num: "1" }],
     cost: "2.5000",
   },
-  ctl: {
-    skipped: true,
-    percent: "20.00",
-    scrapWeight: "150.00",
-    cost: "1.5000",
-  },
+  // ctl removed; replaced by cut
   storageFreight: {},
-  ctl2: {
+  cut: {
     skipped: true,
     segments: [],
+    cost: "1.5000",
   },
 };
 

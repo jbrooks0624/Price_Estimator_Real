@@ -26,8 +26,18 @@ const TrimmingDropdown: React.FC = () => {
             type="number"
             min={0}
             step="1"
+            inputMode="decimal"
             value={state.trimming.widthAfterTrim}
             onChange={(e) =>
+              setState((prev) => ({
+                ...prev,
+                trimming: {
+                  ...prev.trimming,
+                  widthAfterTrim: e.target.value,
+                },
+              }))
+            }
+            onBlur={(e) =>
               setState((prev) => ({
                 ...prev,
                 trimming: {
@@ -50,8 +60,15 @@ const TrimmingDropdown: React.FC = () => {
             type="number"
             min={0}
             step="0.1"
+            inputMode="decimal"
             value={state.trimming.cost}
             onChange={(e) =>
+              setState((prev) => ({
+                ...prev,
+                trimming: { ...prev.trimming, cost: e.target.value },
+              }))
+            }
+            onBlur={(e) =>
               setState((prev) => ({
                 ...prev,
                 trimming: { ...prev.trimming, cost: format(e.target.value, 4) },
